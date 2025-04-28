@@ -110,13 +110,13 @@
         const tokensPerHour = (cost / cooldown) * 3600;
     
         let output = `
-          Open for <b>${Math.floor(hours)}</b> hrs. <br><br>
-          Tokens per hour: <b>${tokensPerHour.toLocaleString()}</b> <br><br>
+         Can open for <b>${Math.floor(hours)}</b> hrs. <br><br>
+          Tokens spent per hour: <b>${tokensPerHour.toLocaleString()}</b> <br><br>
         `;
         
         if (!isNaN(bulk) && bulk > 0) {
           output += `
-            Total runes you'll receive: <b>${Math.floor(runesWithBulk).toLocaleString()}</b> <br><br>
+            Total runes youll receive: <b>${Math.floor(runesWithBulk).toLocaleString()}</b> <br><br>
           `;
         }
     
