@@ -53,16 +53,18 @@
       -moz-appearance: textfield;
     }
 
+    /* Style for output with blurry background */
     .output {
       margin-top: 30px;
       font-size: 24px;
       text-align: center;
-      line-height: 1.8; /* Add line height for spacing between rows */
-    }
-
-    .output b {
-      display: block; /* Make each bold element a block to add margin around them */
-      margin-bottom: 15px; /* Add space between rows */
+      background: rgba(0, 0, 0, 0.6); /* Semi-transparent black */
+      border-radius: 10px;
+      padding: 20px;
+      backdrop-filter: blur(10px); /* Apply blur to the background */
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5); /* Add subtle shadow */
+      max-width: 90%;
+      width: 350px;
     }
 
     canvas {
@@ -82,7 +84,6 @@
     <input type="number" id="tokens" placeholder="Tokens">
     <input type="number" id="cost" placeholder="Rune Cost">
     <input type="number" id="cooldown" placeholder="Roll Speed">
-    <!-- Added Rune bulk input -->
     <input type="number" id="bulk" placeholder="Bulk (Optional)">
   </div>
 
@@ -92,29 +93,26 @@
     const tokensInput = document.getElementById('tokens');
     const costInput = document.getElementById('cost');
     const cooldownInput = document.getElementById('cooldown');
-    const bulkInput = document.getElementById('bulk'); // Added bulk input
+    const bulkInput = document.getElementById('bulk');
     const outputDiv = document.getElementById('output');
 
     function update() {
       const tokens = parseFloat(tokensInput.value);
       const cost = parseFloat(costInput.value);
       const cooldown = parseFloat(cooldownInput.value);
-      const bulk = parseFloat(bulkInput.value); // Get the bulk value
+      const bulk = parseFloat(bulkInput.value);
 
       if (!isNaN(tokens) && !isNaN(cost) && !isNaN(cooldown) && cost > 0 && cooldown > 0) {
         const runesOpened = tokens / cost;
-        const runesWithBulk = isNaN(bulk) || bulk <= 0 ? runesOpened : runesOpened * bulk; // If bulk is not input or is invalid, use runesOpened
+        const runesWithBulk = isNaN(bulk) || bulk <= 0 ? runesOpened : runesOpened * bulk;
         const seconds = runesOpened * cooldown;
         const hours = seconds / 3600;
         const tokensPerHour = (cost / cooldown) * 3600;
 
-        // Display the results without bulk if no bulk is inputted
         let output = `
-          Can open for <b>${Math.floor(hours)}</b> hrs. 
-          <br>Tokens spent per hour: <b>${tokensPerHour.toLocaleString()}</b>
+          Open for <b>${Math.floor(hours)} hrs.</b> 
+          <br>Tokens per hour: <b>${tokensPerHour.toLocaleString()}</b>
         `;
-
-
         
         if (!isNaN(bulk) && bulk > 0) {
           output += `<br>Total runes you'll receive: <b>${Math.floor(runesWithBulk).toLocaleString()}</b>`;
@@ -129,7 +127,7 @@
     tokensInput.addEventListener('input', update);
     costInput.addEventListener('input', update);
     cooldownInput.addEventListener('input', update);
-    bulkInput.addEventListener('input', update); // Add listener for bulk input
+    bulkInput.addEventListener('input', update);
 
     // Background animation
     const canvas = document.getElementById('background');
