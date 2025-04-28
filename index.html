@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Rune Opening Calculator with Moving Background</title>
+  <link rel="icon" href="favicon.ico" type="image/x-icon">
+  <style>
+    body {
+      margin: 0;
+      background-color: #121212;
+      color: #fff;
+      font-family: Arial, sans-serif;
+      height: 100vh;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      padding-top: 50px;
+    }
+
+    .input-group {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      margin-bottom: 100px;
+    }
+
+    input {
+      padding: 10px;
+      font-size: 16px;
+      border: none;
+      border-radius: 5px;
+      background-color: #1e1e1e;
+      color: #fff;
+      width: 250px;
+      text-align: center;
+    }
+
+    input::placeholder {
+      color: #777;
+    }
+
+    .output {
+      margin-top: 30px;
+      font-size: 24px;
+      text-align: center;
+    }
+
+    canvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: -1;
+    }
+  </style>
+</head>
+
+<body>
+
+  <canvas id="background"></canvas>
+
+  <div class="input-group">
+    <input type="number" id="tokens" placeholder="Tokens you have">
+    <input type="number" id="cost" placeholder="Rune cost">
+    <input type="number" id="cooldown" placeholder="Rune cooldown (seconds)">
+  </div>
+
+  <div class="output" id="output"></div>
+
+  <script>
+    const tokensInput = document.getElementById('tokens');
+    const costInput = document.getElementById('cost');
+    const cooldownInput = document.getElementById('cooldown');
+    const outputDiv = document.getElementById('output');
+
+    function update() {
+      const tokens = parseFloat(tokensInput.value);
+      const cost = parseFloat(costInput.value);
+      const cooldown = parseFloat(cooldownInput.value);
+
+      if (!isNaN(tokens) && !isNaN(cost) && !isNaN(cooldown) && cost > 0 && cooldown > 0) {
+        const runesOpened = tokens / cost;
+        const seconds = runesOpened * cooldown;
+        const hours = seconds / 3600;
+        const tokensPerHour = (cost / cooldown) * 3600;
+
+        outputDiv.innerHTML = `
+        Hours you can open: <b>${hours.toFixed(2)}</b><br>
+        Tokens used per hour: <b>${tokensPerHour.toLocaleString()}</b>
+      `;
+      } else {
+        outputDiv.innerHTML = "";
+      }
+    }
+
+    tokensInput.addEventListener('input', update);
+    costInput.addEventListener('input', update);
+    cooldownInput.addEventListener('input', update);
+
+    // Background animation
+    const canvas = document.getElementById('background');
+    const ctx = canvas.getContext('2d');
+    let width, height;
+    let points = [];
+
+    function resize() {
+      width = canvas.width = window.innerWidth;
+      height = canvas.height = window.innerHeight;
+    }
+
+    window.addEventListener('resize', resize);
+    resize();
+
+    function createPoints() {
+      points = [];
+      for (let i = 0; i < 100; i++) {
+        points.push({
+          x: Math.random() * width,
+          y: Math.random() * height,
+          vx: (Math.random() - 0.5) * 0.5,
+          vy: (Math.random() - 0.5) * 0.5
+        });
+      }
+    }
+
+    function draw() {
+      ctx.clearRect(0, 0, width, height);
+      ctx.fillStyle = '#fff';
+      points.forEach(p => {
+        p.x += p.vx;
+        p.y += p.vy;
+
+        if (p.x < 0 || p.x > width) p.vx *= -1;
+        if (p.y < 0 || p.y > height) p.vy *= -1;
+
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, 2, 0, Math.PI * 2);
+        ctx.fill();
+      });
+
+      for (let i = 0; i < points.length; i++) {
+        for (let j = i + 1; j < points.length; j++) {
+          const dx = points[i].x - points[j].x;
+          const dy = points[i].y - points[j].y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+          if (dist < 100) {
+            ctx.strokeStyle = `rgba(255,255,255,${1 - dist / 100})`;
+            ctx.beginPath();
+            ctx.moveTo(points[i].x, points[i].y);
+            ctx.lineTo(points[j].x, points[j].y);
+            ctx.stroke();
+          }
+        }
+      }
+
+      requestAnimationFrame(draw);
+    }
+
+    createPoints();
+    draw();
+  </script>
+
+</body>
+
+</html>
