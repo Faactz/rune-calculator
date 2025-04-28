@@ -101,28 +101,31 @@
       const cost = parseFloat(costInput.value);
       const cooldown = parseFloat(cooldownInput.value);
       const bulk = parseFloat(bulkInput.value);
-
+    
       if (!isNaN(tokens) && !isNaN(cost) && !isNaN(cooldown) && cost > 0 && cooldown > 0) {
         const runesOpened = tokens / cost;
         const runesWithBulk = isNaN(bulk) || bulk <= 0 ? runesOpened : runesOpened * bulk;
         const seconds = runesOpened * cooldown;
         const hours = seconds / 3600;
         const tokensPerHour = (cost / cooldown) * 3600;
-
+    
         let output = `
-          Open for <b>${Math.floor(hours)}</b> hrs. 
-          <br>Tokens per hour: <b>${tokensPerHour.toLocaleString()}</b>
+          Open for <b>${Math.floor(hours)}</b> hrs. <br><br>
+          Tokens per hour: <b>${tokensPerHour.toLocaleString()}</b> <br><br>
         `;
         
         if (!isNaN(bulk) && bulk > 0) {
-          output += `<br>Total runes you'll receive: <b>${Math.floor(runesWithBulk).toLocaleString()}</b>`;
+          output += `
+            Total runes you'll receive: <b>${Math.floor(runesWithBulk).toLocaleString()}</b> <br><br>
+          `;
         }
-
+    
         outputDiv.innerHTML = output;
       } else {
         outputDiv.innerHTML = "";
       }
     }
+
 
     tokensInput.addEventListener('input', update);
     costInput.addEventListener('input', update);
