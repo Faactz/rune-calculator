@@ -57,6 +57,12 @@
       margin-top: 30px;
       font-size: 24px;
       text-align: center;
+      line-height: 1.8; /* Add line height for spacing between rows */
+    }
+
+    .output b {
+      display: block; /* Make each bold element a block to add margin around them */
+      margin-bottom: 15px; /* Add space between rows */
     }
 
     canvas {
@@ -104,7 +110,7 @@
 
         // Display the results without bulk if no bulk is inputted
         let output = `
-          You can open for: <b>${Math.floor(hours)}</b> hours. <br>
+          You can open for <b>${Math.floor(hours)}</b> hours. <br>
           Tokens used per hour: <b>${tokensPerHour.toLocaleString()}</b>
         `;
         
