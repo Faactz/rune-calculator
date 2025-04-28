@@ -53,16 +53,16 @@
       -moz-appearance: textfield;
     }
 
-    /* Style for output with blurry background */
+    /* Style for output with more transparency and glowing effect */
     .output {
       margin-top: 30px;
       font-size: 24px;
       text-align: center;
-      background: rgba(0, 0, 0, 0.6); /* Semi-transparent black */
+      background: rgba(0, 0, 0, 0.4); /* More transparent background */
       border-radius: 10px;
       padding: 20px;
-      backdrop-filter: blur(10px); /* Apply blur to the background */
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5); /* Add subtle shadow */
+      backdrop-filter: blur(15px); /* More blur */
+      box-shadow: 0 0 30px rgba(255, 255, 255, 0.7); /* Glowing effect */
       max-width: 90%;
       width: 350px;
     }
@@ -110,7 +110,7 @@
         const tokensPerHour = (cost / cooldown) * 3600;
 
         let output = `
-          Open for <b>${Math.floor(hours)} hrs.</b> 
+          Open for <b>${Math.floor(hours)}</b> hrs. 
           <br>Tokens per hour: <b>${tokensPerHour.toLocaleString()}</b>
         `;
         
