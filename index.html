@@ -110,9 +110,10 @@
 
         // Display the results without bulk if no bulk is inputted
         let output = `
-          Open for <b>${Math.floor(hours)}</b> hours. <br>
-          Tokens per hour: <b>${tokensPerHour.toLocaleString()}</b>
+          Can open for <b>${Math.floor(hours)}</b> hrs. 
+          <br>Tokens spent per hour: <b>${tokensPerHour.toLocaleString()}</b>
         `;
+
 
         
         if (!isNaN(bulk) && bulk > 0) {
