@@ -77,7 +77,7 @@
     <input type="number" id="cost" placeholder="Rune Cost">
     <input type="number" id="cooldown" placeholder="Roll Speed">
     <!-- Added Rune bulk input -->
-    <input type="number" id="bulk" placeholder="Bulk">
+    <input type="number" id="bulk" placeholder="Bulk (Optional)">
   </div>
 
   <div class="output" id="output"></div>
@@ -95,17 +95,17 @@
       const cooldown = parseFloat(cooldownInput.value);
       const bulk = parseFloat(bulkInput.value); // Get the bulk value
 
-      if (!isNaN(tokens) && !isNaN(cost) && !isNaN(cooldown) && !isNaN(bulk) && cost > 0 && cooldown > 0 && bulk > 0) {
+      if (!isNaN(tokens) && !isNaN(cost) && !isNaN(cooldown) && cost > 0 && cooldown > 0) {
         const runesOpened = tokens / cost;
-        const runesWithBulk = runesOpened * bulk; // Multiply by bulk to get the total runes
+        const runesWithBulk = isNaN(bulk) || bulk <= 0 ? runesOpened : runesOpened * bulk; // If bulk is not input or is invalid, use runesOpened
         const seconds = runesOpened * cooldown;
         const hours = seconds / 3600;
         const tokensPerHour = (cost / cooldown) * 3600;
 
         outputDiv.innerHTML = `
-        Hours you can open: <b>${hours.toFixed(2)}</b><br>
+        Hours you can open: <b>${Math.floor(hours)}</b><br>
         Tokens used per hour: <b>${tokensPerHour.toLocaleString()}</b><br>
-        Total runes you will receive: <b>${runesWithBulk.toLocaleString()}</b>
+        Total runes you will receive: <b>${Math.floor(runesWithBulk).toLocaleString()}</b>
       `;
       } else {
         outputDiv.innerHTML = "";
