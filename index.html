@@ -65,6 +65,8 @@
     <input type="number" id="tokens" placeholder="Tokens you have">
     <input type="number" id="cost" placeholder="Rune cost">
     <input type="number" id="cooldown" placeholder="Rune cooldown (seconds)">
+    <!-- Added Rune bulk input -->
+    <input type="number" id="bulk" placeholder="Rune bulk (per purchase)">
   </div>
 
   <div class="output" id="output"></div>
@@ -73,22 +75,26 @@
     const tokensInput = document.getElementById('tokens');
     const costInput = document.getElementById('cost');
     const cooldownInput = document.getElementById('cooldown');
+    const bulkInput = document.getElementById('bulk'); // Added bulk input
     const outputDiv = document.getElementById('output');
 
     function update() {
       const tokens = parseFloat(tokensInput.value);
       const cost = parseFloat(costInput.value);
       const cooldown = parseFloat(cooldownInput.value);
+      const bulk = parseFloat(bulkInput.value); // Get the bulk value
 
-      if (!isNaN(tokens) && !isNaN(cost) && !isNaN(cooldown) && cost > 0 && cooldown > 0) {
+      if (!isNaN(tokens) && !isNaN(cost) && !isNaN(cooldown) && !isNaN(bulk) && cost > 0 && cooldown > 0 && bulk > 0) {
         const runesOpened = tokens / cost;
+        const runesWithBulk = runesOpened * bulk; // Multiply by bulk to get the total runes
         const seconds = runesOpened * cooldown;
         const hours = seconds / 3600;
         const tokensPerHour = (cost / cooldown) * 3600;
 
         outputDiv.innerHTML = `
         Hours you can open: <b>${hours.toFixed(2)}</b><br>
-        Tokens used per hour: <b>${tokensPerHour.toLocaleString()}</b>
+        Tokens used per hour: <b>${tokensPerHour.toLocaleString()}</b><br>
+        Total runes you will receive: <b>${runesWithBulk.toLocaleString()}</b>
       `;
       } else {
         outputDiv.innerHTML = "";
@@ -98,6 +104,7 @@
     tokensInput.addEventListener('input', update);
     costInput.addEventListener('input', update);
     cooldownInput.addEventListener('input', update);
+    bulkInput.addEventListener('input', update); // Add listener for bulk input
 
     // Background animation
     const canvas = document.getElementById('background');
